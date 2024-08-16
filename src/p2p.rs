@@ -1,21 +1,20 @@
 use super::{App, Block};
 use libp2p::{
     floodsub::{Floodsub, FloodsubEvent, Topic},
-    identity,
+    identity::Keypair,
     mdns::{Mdns, MdnsEvent},
     swarm::{NetworkBehaviourEventProcess, Swarm},
     NetworkBehaviour, PeerId,
 };
 use log::{error, info};
-use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::{collections::HashSet, sync::LazyLock};
 use tokio::sync::mpsc;
 
-pub static KEYS: Lazy<identity::Keypair> = Lazy::new(identity::Keypair::generate_ed25519);
-pub static PEER_ID: Lazy<PeerId> = Lazy::new(|| PeerId::from(KEYS.public()));
-pub static CHAIN_TOPIC: Lazy<Topic> = Lazy::new(|| Topic::new("chains"));
-pub static BLOCK_TOPIC: Lazy<Topic> = Lazy::new(|| Topic::new("blocks"));
+pub static KEYS: LazyLock<Keypair> = LazyLock::new(|| Keypair::generate_ed25519());
+pub static PEER_ID: LazyLock<PeerId> = LazyLock::new(|| PeerId::from(KEYS.public()));
+pub static CHAIN_TOPIC: LazyLock<Topic> = LazyLock::new(|| Topic::new("chains"));
+pub static BLOCK_TOPIC: LazyLock<Topic> = LazyLock::new(|| Topic::new("blocks"));
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ChainResponse {
