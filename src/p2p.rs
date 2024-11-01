@@ -1,4 +1,4 @@
-use super::{App, Block};
+// use super::{Blockchain};
 use libp2p::{
     floodsub::{Floodsub, FloodsubEvent, Topic},
     identity::Keypair,
@@ -10,6 +10,8 @@ use log::{error, info};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashSet, sync::LazyLock};
 use tokio::sync::mpsc;
+
+use crate::bc::{Block, Blockchain};
 
 pub static KEYS: LazyLock<Keypair> = LazyLock::new(|| Keypair::generate_ed25519());
 pub static PEER_ID: LazyLock<PeerId> = LazyLock::new(|| PeerId::from(KEYS.public()));
@@ -42,12 +44,12 @@ pub struct AppBehaviour {
     #[behaviour(ignore)]
     pub init_sender: mpsc::UnboundedSender<bool>,
     #[behaviour(ignore)]
-    pub app: App,
+    pub app: Blockchain,
 }
 
 impl AppBehaviour {
     pub async fn new(
-        app: App,
+        app: Blockchain,
         response_sender: mpsc::UnboundedSender<ChainResponse>,
         init_sender: mpsc::UnboundedSender<bool>,
     ) -> Self {
