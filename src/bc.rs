@@ -1,5 +1,5 @@
 use chrono::Utc;
-use log::{error, info, warn};
+use log::{error, warn};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
@@ -77,17 +77,8 @@ impl Blockchain {
     }
 
     fn is_chain_valid(&self, chain: &[Block]) -> bool {
-        for i in 0..chain.len() {
-            if i == 0 {
-                continue;
-            }
-            let first = chain.get(i - 1).expect("has to exist");
-            let second = chain.get(i).expect("has to exist");
-            if !self.is_block_valid(second, first) {
-                return false;
-            }
-        }
-        true
+        // TODO 1
+        todo!("檢查整條鏈是否合法");
     }
 
     // We always choose the longest valid chain
@@ -127,26 +118,10 @@ impl Block {
 }
 
 fn mine_block(id: u64, timestamp: i64, previous_hash: &str, data: &str) -> (u64, String) {
-    info!("mining block...");
-    let mut nonce = 0;
+    log::info!("mining block...");
 
-    loop {
-        if nonce % 100000 == 0 {
-            info!("nonce: {}", nonce);
-        }
-        let hash = calculate_hash(id, timestamp, previous_hash, data, nonce);
-        let binary_hash = hash_to_binary_representation(&hash);
-        if binary_hash.starts_with(DIFFICULTY_PREFIX) {
-            info!(
-                "mined! nonce: {}, hash: {}, binary hash: {}",
-                nonce,
-                hex::encode(&hash),
-                binary_hash
-            );
-            return (nonce, hex::encode(hash));
-        }
-        nonce += 1;
-    }
+    // TODO 2
+    todo!("實作挖礦");
 }
 
 pub fn calculate_hash(id: u64, timestamp: i64, previous_hash: &str, data: &str, nonce: u64) -> Vec<u8> {
