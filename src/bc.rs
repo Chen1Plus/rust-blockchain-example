@@ -122,6 +122,8 @@ fn mine_block(id: u64, timestamp: i64, previous_hash: &str, data: &str) -> (u64,
 
     // TODO 2
     todo!("實作挖礦");
+    // 要回傳的是 nonce 和 hash
+    // 回傳的 hash 必須要以 DIFFICULTY_PREFIX 開頭，你要使用 hex::encode 來將 hash 轉換成回傳的字串
 }
 
 pub fn calculate_hash(id: u64, timestamp: i64, previous_hash: &str, data: &str, nonce: u64) -> Vec<u8> {
